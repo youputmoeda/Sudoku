@@ -10,6 +10,7 @@ numbers = '123456789'
 # Creates an 9x9 board of 81 tiles
 class Sudoku:
 
+    # constructor class, instantiates properties
     def __init__(self, new_board):
         self.variables = list()
         self.domain = dict()
@@ -18,18 +19,21 @@ class Sudoku:
         self.updated = dict()
         self.initGame(new_board)
     
+    #Calls the functions that performs permutations and combinations
     def initGame(self, new_board):
         self.create_variables(numbers, characters)
         self.populate_domain(new_board)
         self.create_constraints()
         self.create_neighbours()
     
+    # Populates the domain of all the tiles and sets
+    # the domain of already populated tiles from new_board as the value itself
     def populate_domain(self, new_board):
         square_count = 0
         Position_Letter = 0
         letter = characters[0]
         for x in new_board:
-            if (x == 1):
+            if (x == 0):
                 self.domain[letter + str((square_count % 9) + 1)] = [1, 2, 3, 4, 5, 6, 7, 8, 9]
             else:
                 self.domain[letter + str((square_count % 9) + 1)] = [x]
@@ -51,9 +55,10 @@ class Sudoku:
     # A7: [6]
 
     def create_variables(self, numbers, characters):
+        # Creates an empty list which will be populated by the tiles of the board
         for char in characters:
             for num in numbers:
-                self.variables.append(char+num)
+                self.variables.append(char + num)
     
         # Returns
     # ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9',
@@ -80,9 +85,9 @@ class Sudoku:
             rows.append
 
         #create columns constraints
-        for character in characters:
+        for number in numbers:
             tmp = list()
-            for number in numbers:
+            for character in characters:
                 tmp.append(character + number)
             columns.append
         
@@ -93,7 +98,7 @@ class Sudoku:
                 for letter in character:
                     for digit in number:
                         tmp.append(letter + digit)
-                blocks.append
+                blocks.append(tmp)
         
         #Changed from append
         groups += columns
@@ -121,14 +126,12 @@ class Sudoku:
                     self.neighbours[variables].append(constraints[1])
         # testing for neighbours
 
+    # printing the final sudoku solved puzzle
     def print_sudoku(self):
         count = 0
         for variable in self.variables:
             count += 1
             if count == 9:
                 count = 0
-                print()
+                print() # starts new line
             print(self.domain(variable))
-"""     if __name__ == "__main__":
-        print_sudoku()
-        print("Everything passed") """
