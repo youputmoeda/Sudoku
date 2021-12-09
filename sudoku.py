@@ -33,17 +33,24 @@ class Sudoku:
         Position_Letter = 0
         letter = characters[0]
         for x in new_board:
-            if (x == 0):
-                self.domain[letter + str((square_count % 9) + 1)] = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-            else:
-                self.domain[letter + str((square_count % 9) + 1)] = [x]
-            self.updated[letter + str((square_count % 9) + 1)] = list()
+            for y in x:
+                if (y == 0):
+                    self.domain[letter + str((square_count % 9) + 1)] = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+                    square_count += 1
+                    if (square_count % 9) == 0:
+                        if Position_Letter < 8:
+                            Position_Letter += 1
+                        letter = characters[Position_Letter]
+                else:
+                    self.domain[letter + str((square_count % 9) + 1)] = [y]
+                    square_count += 1
+                    if (square_count % 9) == 0:
+                        if Position_Letter < 8:
+                            Position_Letter += 1
+                        letter = characters[Position_Letter]
+                self.updated[letter + str((square_count % 9) + 1)] = list()
 
-        square_count += 1
-        if (square_count % 9) == 0:
-            if Position_Letter < 8:
-                Position_Letter += 1
-                letter = characters[Position_Letter]
+        
 
         # Output:
     # A1: [1, 2, 3, 4, 5, 6, 7, 8, 9],
@@ -82,14 +89,15 @@ class Sudoku:
             tmp = list()
             for number in numbers:
                 tmp.append(character + number)
-            rows.append
+            rows.append(tmp)
+            print("rows: ", rows)
 
         #create columns constraints
         for number in numbers:
             tmp = list()
             for character in characters:
                 tmp.append(character + number)
-            columns.append
+            columns.append(tmp)
         
         #create blocks constraints
         for character in ['ABC', 'DEF', 'GHI']:
@@ -99,6 +107,7 @@ class Sudoku:
                     for digit in number:
                         tmp.append(letter + digit)
                 blocks.append(tmp)
+                print("blocks: ", blocks)
         
         #Changed from append
         groups += columns

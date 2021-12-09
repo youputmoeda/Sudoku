@@ -1,3 +1,5 @@
+from itertools import count
+from typing import Tuple
 from sudoku import Sudoku
 
 
@@ -12,17 +14,26 @@ def revise(board, a, b):
     #False if no revision was made.
 
     revised = False
-    print(a) #A1
-    print(board.domain[a]) #[1, 2, 3, 4, 5, 6, 7, 8, 9]
-    print(b) #A2
-    print(board.domain[b])
+    removal = True
+    # print(a) #A1
+    # print(board.domain[a]) #[1, 2, 3, 4, 5, 6, 7, 8, 9]
+    # print(b) #A2
+    # print(board.domain[b])
     # check each value in the domain of x1
     for x in board.domain[a]:
+        #print("x: ", x)
+        removal = True
         for y in board.domain[b]:
-            if any [x != y]:
-                revised = False
-        else:
+            #print("y: ", y)
+            if x != y:
+                removal = False
+            #print("removal: ", removal)
+        if removal:
+            #print("Before removal: ", board.domain[a])
             board.domain[a].remove(x) # delete from domain if true
+            print(a)
+            print("After removal : ", board.domain[a])
+            #print("\n")
             revised = True
 
     return revised
@@ -45,7 +56,7 @@ def ac3(board):
         # If the x domain has changed
         if revised:
             # check if D1 is = 0, which means no solution
-            if not board.domain(Current_arc[0]):
+            if not board.domain[Current_arc[0]]:
                 return False
             # else for each neighbour of
             for neighbours in board.neighbours[Current_arc[0]]:
@@ -54,19 +65,39 @@ def ac3(board):
                     continue
                 tmp_list = [neighbours, Current_arc[0]]
                 queue.append(tmp_list)
+                #print("tmp: ", tmp_list)
+    return True
 
 def main():
     InputFile = open('sudoku.txt')
     game_board = list()
     for line in InputFile:
         if line.strip():
-            game_board += [int(i) for i in line.split(' ')]
+            game_board.append([int(i) for i in line.strip(' ABCDEFGHI\n')])
+    print("game_board: ", game_board)
     # Close the text file
     InputFile.close
     # Create the sudoku object
     board = Sudoku(game_board)
     
-    ac3(board)
+    if ac3(board):
+        print("Success!")
+        print("|", end = "")
+        row = 0
+        count = 0
+        for x in board.domain:
+            if count == 9:
+                count = 0
+                print()
+                row += 1
+                if row == 3 or row == 6:
+                    print()
+                print('|', end = '')
+            if count == 3 or count == 6:
+                    print("  |", end="")
+            print("{}|".format(board.domain[x][0]), end="")
+            count += 1
+    
 
 if __name__ == "__main__":
     main()
