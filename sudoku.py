@@ -90,7 +90,6 @@ class Sudoku:
             for number in numbers:
                 tmp.append(character + number)
             rows.append(tmp)
-            print("rows: ", rows)
 
         #create columns constraints
         for number in numbers:
@@ -107,7 +106,6 @@ class Sudoku:
                     for digit in number:
                         tmp.append(letter + digit)
                 blocks.append(tmp)
-                print("blocks: ", blocks)
         
         #Changed from append
         groups += columns
@@ -134,13 +132,3 @@ class Sudoku:
                 if variables == constraints[0]:
                     self.neighbours[variables].append(constraints[1])
         # testing for neighbours
-
-    # printing the final sudoku solved puzzle
-    def print_sudoku(self):
-        count = 0
-        for variable in self.variables:
-            count += 1
-            if count == 9:
-                count = 0
-                print() # starts new line
-            print(self.domain(variable))

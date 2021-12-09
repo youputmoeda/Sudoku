@@ -1,5 +1,3 @@
-from itertools import count
-from typing import Tuple
 from sudoku import Sudoku
 
 
@@ -31,8 +29,7 @@ def revise(board, a, b):
         if removal:
             #print("Before removal: ", board.domain[a])
             board.domain[a].remove(x) # delete from domain if true
-            print(a)
-            print("After removal : ", board.domain[a])
+            #print(a, "After removal : ", board.domain[a])
             #print("\n")
             revised = True
 
@@ -74,14 +71,25 @@ def main():
     for line in InputFile:
         if line.strip():
             game_board.append([int(i) for i in line.strip(' ABCDEFGHI\n')])
-    print("game_board: ", game_board)
+    print("The board:")
+    z = 0
+    while z < 9:
+        print(game_board[z])
+        z += 1
+    print()
+    #print("game_board: ", game_board)
     # Close the text file
-    InputFile.close
-    # Create the sudoku object
+    InputFile.close()
     board = Sudoku(game_board)
     
     if ac3(board):
-        print("Success!")
+        for square in board.variables:
+            if len(board.domain[square]) > 1:
+                print("Can't do this Sudoku!")
+                return
+        print("Easy Game!")
+        print()
+        print("This is the Solution:")
         print("|", end = "")
         row = 0
         count = 0
